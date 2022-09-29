@@ -1,0 +1,36 @@
+.infoCard {
+    background-color: var(--cardColor);
+    padding-top: 1rem;
+    padding-left: .5rem;
+    padding-bottom: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    width: 90%;
+}
+
+.infoHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 1rem;
+}
+
+.edit {
+    width: 2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+
+
+.L-button {
+    width: 7rem;
+    padding: 8px;
+    align-self: flex-end;
+    justify-self: flex-end;
+    margin-top: 6rem;
+    margin-right: 10px;
+}

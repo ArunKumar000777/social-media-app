@@ -1,0 +1,120 @@
+.profileCard {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    gap: 1rem;
+    position: relative;
+    overflow-x: clip;
+    background-color: var(--cardColor);
+} 
+
+ .profileImages {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .profileImages>img:nth-of-type(1){
+    width: 100%;
+    
+    
+} */
+
+.coverImage__container {
+    width: 100%;
+}
+.coverImage {
+    width: 100%;
+}
+
+.profileImage__container {
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 3.5rem;
+}
+
+.profileImage {
+    width: 6rem;
+    border-radius: 50%;
+    box-shadow: var(--profileShadow);
+}
+
+.profile__name {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.profile__name>span:nth-of-type(1){
+    font-weight: bold;
+}
+
+.followStatus__container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+}
+
+.followStatus__container>hr {
+    width: 85%;
+    border: 1px solid var(--hrColor);
+}
+
+.followStatus__container > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    width: 80%;
+}
+
+.follow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .4rem;
+}
+
+.follow>span:nth-of-type(1){
+    font-weight: bold;
+}
+.follow>span:nth-of-type(2){
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.vl{
+    height: 3rem;
+    width: 2px;
+    background-color: var(--hrColor);
+}
+
+.profileCard>span{
+    font-weight: bold;
+    align-self: center;
+    color: orange;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+/* .profileImages>img:nth-of-type(2){
+    width: 6rem;
+    border-radius: 50%;
+    position: absolute;
+    
+} */
+
+/* .proImg {
+    width: 6rem;
+    position: absolute;
+    z-index: 100;
+} */
