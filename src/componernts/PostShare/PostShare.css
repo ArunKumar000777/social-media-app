@@ -33,18 +33,20 @@
 .postOptions {
     display: flex;
     justify-content: space-around;
+    margin-left: -52px;
+    /* background-color: blue; */
 
 }
 
 .option{
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    /* padding: 3.5px; */
+    /* padding-left: 8px; */
+    /* padding-right: 8px; */
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .option:hover{
@@ -52,8 +54,8 @@
 }
 
 .ps-button{
-    padding: 5px 20px;
-    font-size: 12px;
+    padding: 3.5px 15px;
+    font-size: 10px;
 }
 .previewImage{
     position: relative;

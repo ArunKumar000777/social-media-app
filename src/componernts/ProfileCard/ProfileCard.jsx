@@ -1,55 +1,83 @@
 import React from "react";
 import "./ProfileCard.css";
-import cover from "../../img/cover.jpg";
-import profile from "../../img/profileImg.jpg";
+import useAuth from "../../hooks/useAuth";
+import { Link, useParams } from "react-router-dom";
+import { useGetTimelinePostsQuery } from "../../features/posts/postsApiSlice";
+import { useGetUsersQuery } from "../../features/users/usersApiSlice";
+// import { useGetUserProfileInfoQuery } from "../../features/users/usersApiSlice";
 
-function ProfileCard() {
 
-    const profilePage = true
+function ProfileCard({ location }) {
+
+    const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
+
+    const { user } = useAuth();
+    const { post } = useGetTimelinePostsQuery(user?._id, {
+        selectFromResult: ({ data }) => ({
+            post: data?.filter((post) => post.userId === user?._id),
+        }),
+    });
+
     return (
         <div className="profileCard">
             <div className="profileImages">
                 <div className="coverImage__container">
-                    <img src={cover} alt="" className="coverImage" />
+                    <img
+                        src={user?.coverPicture ? serverPublic + user.coverPicture : serverPublic + "defaultCover.jpg"}
+                        alt=""
+                        className="coverImage"
+                    />
                 </div>
                 <div className="profileImage__container">
-                    <img src={profile} alt="" className="profileImage" />
+                    <img
+                        src={user?.profilePicture ? serverPublic + user.profilePicture : serverPublic + "defaultProfile.png"}
+                        alt=""
+                        className="profileImage"
+                    />
                 </div>
             </div>
 
             <div className="profile__name">
-                <span>zandra</span>
-                <span>Senior developer</span>
+                <span>
+                    {user?.firstname}
+                    {user?.lastname}
+                </span>
+                <span>{user?.worksAt || "Write about yourself"}</span>
             </div>
 
             <div className="followStatus__container">
                 <hr />
                 <div>
                     <div className="follow">
-                        <span>7,000</span>
+                        <span>{user?.followers?.length}</span>
                         <span>Followers</span>
                     </div>
                     <div className="vl"></div>
                     <div className="follow">
-                        <span>2</span>
+                        <span>{user?.following?.length}</span>
                         <span>Following</span>
                     </div>
-                    {profilePage && (
+                    {location === "profilePage" && (
                         <>
-                        <div className="vl"></div>
-                    <div className="follow">
-                        <span>3</span>
-                        <span>Posts</span>
-                    </div>
+                            <div className="vl"></div>
+                            <div className="follow">
+                                <span>{post?.length}</span>
+                                <span>Posts</span>
+                            </div>
                         </>
                     )}
                 </div>
                 <hr />
             </div>
-            {
-                profilePage ? '' :<span>My Profile</span>
-            }
-            
+            {location === "profilePage" ? (
+                ""
+            ) : (
+                <span>
+                    <Link style={{ textDecoration: "none", color: "inherit" }} to={`/profile/${user._id}`}>
+                        My Profile
+                    </Link>
+                </span>
+            )}
         </div>
     );
 }

@@ -1,17 +1,30 @@
 // import TwitterIcon from "@mui/icons-material/Twitter";
-import React from "react";
+import React, { useRef } from "react";
 import "./Auth.css";
 import Logo from "../../img/logo.png";
 import { useState } from "react";
 import { useEffect } from "react";
-import { login, signUp } from "../../redux/apiCalls";
+// import { login, signUp } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
+import { useLoginMutation, useSignUpMutation } from "../../features/auth/authApiSlice";
+import { setCredentials } from "../../features/auth/authSlice";
 const Auth = () => {
     // change signUp and login page
-    const [isSignUp, setIsSignUp] = useState(true);
+    const [isSignUp, setIsSignUp] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+    const [signUpError, setSignUpError] = useState(null);
+    const [login, { isLoading }] = useLoginMutation();
+    const [signUp, { isLoading: loading, isError, error, isSuccess }] = useSignUpMutation();
+    // console.log(error?.data?.message);
+    // let signUpError
+    // if (error?.data?.message.includes("E11000")) {
+    //     setSignUpError('duplicate username')
+    // }
+    // E11000
     // store the user details temporoly using useState hook
     const [formData, setFormData] = useState({
         firstname: "",
@@ -50,22 +63,40 @@ const Auth = () => {
         fire();
     }, [formData.confirmpass]);
 
-    // login
     const username = formData.username;
     const password = formData.password;
     const firstname = formData.firstname;
     const lastname = formData.lastname;
-    const dispatch = useDispatch();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (isSignUp) {
-            signUp(dispatch, { username, password, firstname, lastname });
+           const res =  await signUp({ username, password, firstname, lastname });
+           console.log(res);
+           !error && setIsSignUp(!isSignUp);
+            // isSuccess && navigate("/login");
+            console.log(isSignUp)
+
         } else {
-            login(dispatch, { username, password });
+            try {
+                const { accessToken } = await login({ username, password });
+                dispatch(setCredentials({ accessToken }));
+                // console.log(accessToken);
+                navigate("/home");
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
+    useEffect(() => {
+        setSignUpError("");
+    }, [formData.username]);
 
+    useEffect(() => {
+        if (isError) {
+            setSignUpError("username already in use");
+        }
+    }, [isError]);
     return (
         <div className="Auth">
             {/* left side */}
@@ -83,24 +114,29 @@ const Auth = () => {
                     <h3>{isSignUp ? "Sign up" : "Log in"} </h3>
 
                     {isSignUp && (
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="First Name"
-                                className="infoInput"
-                                name="firstname"
-                                onChange={handleChange}
-                                value={formData.firstname}
-                            />
-                            <input
-                                type="text"
-                                placeholder="Last Name"
-                                className="infoInput"
-                                name="lastname"
-                                onChange={handleChange}
-                                value={formData.lastname}
-                            />
-                        </div>
+                        <>
+                            <span>{isError && signUpError}</span>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="First Name"
+                                    className="infoInput"
+                                    name="firstname"
+                                    onChange={handleChange}
+                                    value={formData.firstname}
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Last Name"
+                                    className="infoInput"
+                                    name="lastname"
+                                    onChange={handleChange}
+                                    value={formData.lastname}
+                                    required
+                                />
+                            </div>
+                        </>
                     )}
 
                     <div>
@@ -111,6 +147,7 @@ const Auth = () => {
                             placeholder="Username"
                             onChange={handleChange}
                             value={formData.username}
+                            required
                         />
                     </div>
 
@@ -122,6 +159,7 @@ const Auth = () => {
                             placeholder="Password"
                             onChange={handleChange}
                             value={formData.password}
+                            required
                         />
                         {isSignUp && (
                             <input
@@ -131,6 +169,7 @@ const Auth = () => {
                                 placeholder="Confirm Password"
                                 onChange={handleChange}
                                 value={formData.confirmpass}
+                                required
                             />
                         )}
                     </div>
@@ -157,7 +196,7 @@ const Auth = () => {
                             {isSignUp ? " Already have an account. Login!" : "Don't have an account. Sign up!"}
                         </span>
                     </div>
-                    <button className="button infoButton" type="submit">
+                    <button className="button infoButton" type="submit" disabled={isLoading}>
                         {isSignUp ? "Signup" : "Login"}
                     </button>
                 </form>

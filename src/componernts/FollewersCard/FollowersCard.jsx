@@ -1,25 +1,31 @@
 import React from "react";
 import "./FollowersCard.css";
-import { Followers } from "../../Data/FollowersData";
+import { useGetUsersQuery } from "../../features/users/usersApiSlice";
+import User from "../User/User";
+import useAuth from "../../hooks/useAuth";
 
 const FollowersCard = () => {
+    const { data: users, isLoading, isSuccess, isError, error } = useGetUsersQuery("usersList");
+    const { userId } = useAuth();
+    console.log(userId);
+    // {
+    //     pollingInterval: 15000,
+    //     refetchOnFocus: true,
+    //     refetchOnMountOrArgChange: true,
+    // }
+    //     console.log(users);
+    // const som = JSON.stringify(users)
+    // console.log('som' ,som)
+    // const par = JSON.parse(som)
+    // console.log('par',par)
+    // console.log(typeof null)
     return (
         <div className="FollowerCard">
-            <h3>Who is following you</h3>
-
-            {Followers.map((follower, id) => {
-                return (
-                    <div className="follower">
-                        <div>
-                            <img className="followerImg" src={follower.img} alt="followerimg" />
-                            <div className="name">
-                                <span>{follower.name}</span>
-                                <span>@{follower.username}</span>
-                            </div>
-                        </div>
-                        <button className="button fc-button" >Follow</button>
-                    </div>
-                );
+            <h3>People you may know</h3>
+            {users?.map((user, id) => {
+                if (userId !== user._id) {
+                    return <User user={user} key={id} />;
+                }
             })}
         </div>
     );
