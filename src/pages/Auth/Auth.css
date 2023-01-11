@@ -23,6 +23,11 @@
     width: 4rem;
     height: 4rem;
   }
+
+  .auth__error {
+    color: red;
+    font-size: 12px;
+  }
   
   .Webname > h1 {
       font-size: 3rem;

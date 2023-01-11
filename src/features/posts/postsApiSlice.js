@@ -2,7 +2,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 import { store } from "../../app/store";
 const state = store.getState();
 const token = state.auth.token;
-    
+
 const postsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         uploadImage: builder.mutation({
@@ -35,6 +35,12 @@ const postsApiSlice = apiSlice.injectEndpoints({
                     : [{ type: "Post", id: "LIST" }],
         }),
 
+        getOnePost: builder.query({
+            query: (postId) => ({
+                url: `/posts/${postId}`,
+                method: "GET",
+            }),
+        }),
         likePost: builder.mutation({
             query: ({ postId, userId }) => ({
                 url: `/posts/${postId}/like`,
@@ -44,9 +50,31 @@ const postsApiSlice = apiSlice.injectEndpoints({
 
             invalidatesTags: (result, error, arg) => [{ type: "Post", id: arg.postId }],
         }),
+        deletePost: builder.mutation({
+            query: ({ postId, userId }) => ({
+                url: `/posts/${postId}`,
+                method: "DELETE",
+                body: { userId },
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: "Post", id: arg.postId }],
+        }),
+        updatePost: builder.mutation({
+            query: ({ postId, userId, desc }) => ({
+                url: `/posts/${postId}`,
+                method: "PUT",
+                body: { userId, desc },
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: "Post", id: arg.postId }],
+        }),
     }),
 });
 
-export const { useUploadImageMutation, usePostDataMutation, useGetTimelinePostsQuery, useLikePostMutation } = postsApiSlice;
-
-
+export const {
+    useUploadImageMutation,
+    usePostDataMutation,
+    useGetTimelinePostsQuery,
+    useLikePostMutation,
+    useGetOnePostQuery,
+    useDeletePostMutation,
+    useUpdatePostMutation,
+} = postsApiSlice;

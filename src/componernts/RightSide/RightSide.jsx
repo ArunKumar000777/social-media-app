@@ -5,8 +5,10 @@ import NotificationsIcon from "@mui/icons-material/NotificationsNone";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CommentIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import TrendCard from "../TrendCard/TrendCard";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 const RightSide = () => {
+    const {userId} = useAuth()
     let activeStyle = {
         textDecoration: "underline",
         color: "orange",
@@ -24,13 +26,15 @@ const RightSide = () => {
                     </NavLink>
                 </div>
                 <div className="icon">
-                    <SettingsIcon />
+                    <Link to={`/profile/:userId`}>
+                        <SettingsIcon />
+                    </Link>
                 </div>
                 <div className="icon">
                     <NotificationsIcon />
                 </div>
                 <div className="icon">
-                    <NavLink to={'/chat'} style={({ isActive }) => (isActive ? activeStyle : activeClassName)}>
+                    <NavLink to={"/chat"} style={({ isActive }) => (isActive ? activeStyle : activeClassName)}>
                         <CommentIcon />
                     </NavLink>
                 </div>

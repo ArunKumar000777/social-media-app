@@ -15,17 +15,18 @@ const Auth = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const userRef = useRef();
+    useEffect(() => {
+        userRef.current.focus();
+    }, []);
 
     const [signUpError, setSignUpError] = useState(null);
     const [login, { isLoading }] = useLoginMutation();
     const [signUp, { isLoading: loading, isError, error, isSuccess }] = useSignUpMutation();
-    // console.log(error?.data?.message);
-    // let signUpError
-    // if (error?.data?.message.includes("E11000")) {
-    //     setSignUpError('duplicate username')
-    // }
-    // E11000
-    // store the user details temporoly using useState hook
+
+    const [loginError, setLoginError] = useState("");
+    // console.log(loginError);
+    
     const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
@@ -35,6 +36,9 @@ const Auth = () => {
     });
     const [confirmPassword, setConfirmPassword] = useState(true);
 
+    useEffect(() => {
+        setLoginError("");
+    }, [formData.username, formData.password]);
     // receiving user details via events
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -71,18 +75,21 @@ const Auth = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (isSignUp) {
-           const res =  await signUp({ username, password, firstname, lastname });
-           console.log(res);
-           !error && setIsSignUp(!isSignUp);
+            const res = await signUp({ username, password, firstname, lastname });
+            console.log(res);
+            !error && setIsSignUp(!isSignUp);
             // isSuccess && navigate("/login");
-            console.log(isSignUp)
-
+            console.log(isSignUp);
         } else {
             try {
-                const { accessToken } = await login({ username, password });
-                dispatch(setCredentials({ accessToken }));
-                // console.log(accessToken);
-                navigate("/home");
+                const res = await login({ username, password });
+
+                if (res?.data?.accessToken) {
+                    dispatch(setCredentials({ accessToken: res?.data?.accessToken }));
+                    navigate("/home");
+                } else if (res?.error?.status === 400 || res?.error?.status === 404) {
+                    setLoginError(res.error?.data?.message);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -103,7 +110,7 @@ const Auth = () => {
             <div className="a-left">
                 <img src={Logo} alt="" />
                 <div className="Webname">
-                    <h1>ZKC Media</h1>
+                    <h1>Media</h1>
                     <h6>Explore the ideas throughout the world</h6>
                 </div>
             </div>
@@ -112,6 +119,7 @@ const Auth = () => {
             <div className="a-right">
                 <form className="infoForm authForm" onSubmit={handleSubmit}>
                     <h3>{isSignUp ? "Sign up" : "Log in"} </h3>
+                    <span className="auth__error">{loginError}</span>
 
                     {isSignUp && (
                         <>
@@ -144,6 +152,7 @@ const Auth = () => {
                             type="text"
                             className="infoInput"
                             name="username"
+                            ref={userRef}
                             placeholder="Username"
                             onChange={handleChange}
                             value={formData.username}

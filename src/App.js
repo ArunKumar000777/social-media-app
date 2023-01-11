@@ -7,6 +7,8 @@ import PersistLogin from "./features/auth/PersistLogin";
 import Chat from "./pages/Chat/Chat";
 import useAuth from "./hooks/useAuth";
 import Public from "./componernts/Public/Public";
+import SinglePost from "./pages/singlePost/SinglePost";
+
 function App() {
     const { user } = useAuth();
     console.log(user);
@@ -21,6 +23,7 @@ function App() {
                     <Route path="/home" element={<Home />} />
                     <Route path="/profile/:userId" element={<Profile />} />
                     <Route path="/chat" element={<Chat />} />
+                    <Route path="/post/:postId" element={<SinglePost />} />
                 </Route>
             </Routes>
         </div>
