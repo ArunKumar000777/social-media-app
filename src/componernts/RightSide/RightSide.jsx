@@ -8,7 +8,7 @@ import TrendCard from "../TrendCard/TrendCard";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 const RightSide = () => {
-    const {userId} = useAuth()
+    const { userId } = useAuth();
     let activeStyle = {
         textDecoration: "underline",
         color: "orange",
@@ -26,7 +26,7 @@ const RightSide = () => {
                     </NavLink>
                 </div>
                 <div className="icon">
-                    <Link to={`/profile/:userId`}>
+                    <Link to={`/profile/${userId}`}>
                         <SettingsIcon />
                     </Link>
                 </div>
