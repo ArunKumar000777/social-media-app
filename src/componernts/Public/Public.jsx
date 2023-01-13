@@ -1,13 +1,15 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import './public.css'
+import React from "react";
+import { Link } from "react-router-dom";
+import "./public.css";
 const Public = () => {
-  return (
-    <div>
-        <h1>Welcom to the Page</h1>
-        <Link to='/login'>Please Login Or SignUp</Link>
-    </div>
-  )
-}
+    return (
+        <div className="welcome__container">
+            <h1>Welcom to the Page</h1>
+            <Link to="/login">
+                <span>Please Login Or SignUp</span>
+            </Link>
+        </div>
+    );
+};
 
-export default Public
+export default Public;
