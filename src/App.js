@@ -8,6 +8,8 @@ import Chat from "./pages/Chat/Chat";
 import useAuth from "./hooks/useAuth";
 import Public from "./componernts/Public/Public";
 import SinglePost from "./pages/singlePost/SinglePost";
+import NotFound from "./pages/NotFound/NotFound";
+
 
 function App() {
     const { user } = useAuth();
@@ -25,6 +27,7 @@ function App() {
                     <Route path="/chat" element={<Chat />} />
                     <Route path="/post/:postId" element={<SinglePost />} />
                 </Route>
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </div>
     );
